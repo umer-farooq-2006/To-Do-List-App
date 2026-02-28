@@ -1,0 +1,176 @@
+/**
+ * To-Do List App - Responsive Styles
+ * 
+ * This file contains media queries for responsive design.
+ * Follows mobile-first approach.
+ */
+
+/* ==========================================================================
+   Tablet Breakpoint (768px and up)
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  /* Main Content */
+  .main {
+    padding: var(--spacing-xl);
+  }
+  
+  /* Task Form - Horizontal layout on tablet */
+  .task-form {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .task-form__input {
+    flex: 1;
+  }
+  
+  .task-form__button {
+    white-space: nowrap;
+  }
+  
+  .task-form__error {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+  }
+  
+  /* Filter Controls */
+  .filter-controls {
+    max-width: 400px;
+  }
+  
+  /* Task Item */
+  .task {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+  
+  .task__title {
+    font-size: var(--font-size-md);
+  }
+  
+  /* Empty State */
+  .empty-state {
+    min-height: 300px;
+  }
+}
+
+/* ==========================================================================
+   Desktop Breakpoint (1024px and up)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  /* Main Content */
+  .main {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+  
+  /* Header */
+  .header {
+    padding: var(--spacing-lg);
+  }
+  
+  .header__title {
+    font-size: var(--font-size-xl);
+  }
+  
+  /* Task Form */
+  .task-form {
+    padding: var(--spacing-lg);
+  }
+  
+  .task-form__input {
+    font-size: var(--font-size-md);
+  }
+  
+  /* Task Item - Enhanced hover states for desktop */
+  .task__delete {
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+  
+  .task:hover .task__delete {
+    opacity: 0.7;
+  }
+  
+  .task__delete:hover {
+    opacity: 1;
+  }
+  
+  /* Footer */
+  .footer {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* ==========================================================================
+   Large Desktop (1200px and up)
+   ========================================================================== */
+
+@media (min-width: 1200px) {
+  .main {
+    max-width: 900px;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Preference
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #000000;
+    --color-input-border: #000000;
+  }
+  
+  .task-form__input:focus,
+  .filter-controls__button:focus,
+  .task-form__button:focus,
+  .task__delete:focus {
+    outline-width: 3px;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .header,
+  .task-form,
+  .filter-controls,
+  .footer,
+  .notification {
+    display: none;
+  }
+  
+  .main {
+    max-width: 100%;
+    padding: 0;
+  }
+  
+  .task {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .task__delete {
+    display: none;
+  }
+}
