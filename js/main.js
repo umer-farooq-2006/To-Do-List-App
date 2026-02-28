@@ -14,6 +14,102 @@
 const TodoApp = (function() {
   
   /**
+   * Theme Management
+   */
+  const ThemeManager = (function() {
+    const THEME_KEY = 'todo-app-theme';
+    const DARK_THEME = 'dark';
+    const LIGHT_THEME = 'light';
+    
+    /**
+     * Get saved theme or default to light
+     */
+    function getSavedTheme() {
+      return localStorage.getItem(THEME_KEY) || LIGHT_THEME;
+    }
+    
+    /**
+     * Save theme preference
+     */
+    function saveTheme(theme) {
+      localStorage.setItem(THEME_KEY, theme);
+    }
+    
+    /**
+     * Apply theme to document
+     */
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      updateThemeIcons(theme);
+    }
+    
+    /**
+     * Update theme toggle icons
+     */
+    function updateThemeIcons(theme) {
+      const sunIcon = document.querySelector('.theme-toggle__icon--sun');
+      const moonIcon = document.querySelector('.theme-toggle__icon--moon');
+      
+      if (sunIcon && moonIcon) {
+        if (theme === DARK_THEME) {
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        } else {
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        }
+      }
+    }
+    
+    /**
+     * Toggle theme
+     */
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || LIGHT_THEME;
+      const newTheme = currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+      applyTheme(newTheme);
+      saveTheme(newTheme);
+      
+      // Show success notification
+      UI.showNotification(
+        newTheme === DARK_THEME ? 'Dark mode enabled 🌙' : 'Light mode enabled ☀️',
+        'info'
+      );
+    }
+    
+    /**
+     * Initialize theme
+     */
+    function init() {
+      const savedTheme = getSavedTheme();
+      
+      // Check for system preference if no saved theme
+      const theme = savedTheme || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? DARK_THEME : LIGHT_THEME);
+      
+      applyTheme(theme);
+      
+      // Add theme toggle event listener
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+      }
+      
+      // Listen for system theme changes
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem(THEME_KEY)) {
+          applyTheme(e.matches ? DARK_THEME : LIGHT_THEME);
+        }
+      });
+    }
+    
+    return {
+      init: init,
+      toggleTheme: toggleTheme
+    };
+  })();
+  
+  /**
    * Debounced task creation handler
    * Prevents rapid successive task creation
    */
@@ -183,6 +279,9 @@ const TodoApp = (function() {
    */
   function init() {
     try {
+      // Initialize theme manager (dark mode)
+      ThemeManager.init();
+      
       // Initialize UI module (cache DOM elements)
       UI.init();
       
